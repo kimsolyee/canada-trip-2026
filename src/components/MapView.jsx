@@ -43,8 +43,8 @@ export default function MapView({ onNavigate }) {
               <CircleMarker
                 key={i}
                 center={[w.lat, w.lng]}
-                radius={w.main ? 10 : 7}
-                fillColor={w.main ? '#4A8FA8' : '#E8925A'}
+                radius={w.main ? 11 : 6}
+                fillColor={w.main ? '#4A8FA8' : '#AAB8C2'}
                 color="white"
                 weight={2.5}
                 fillOpacity={0.9}

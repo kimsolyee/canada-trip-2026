@@ -36,8 +36,8 @@ function DayTabs({ activeDay, onSelect }) {
     }}>
       <div style={{
         display: 'flex',
-        minWidth: 'max-content',
-        padding: '0 8px',
+        padding: '6px 8px',
+        gap: '4px',
         maxWidth: '720px',
         margin: '0 auto',
       }}>
@@ -51,21 +51,23 @@ function DayTabs({ activeDay, onSelect }) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                padding: '10px 14px',
+                padding: isActive ? '6px 12px' : '6px 8px',
                 border: 'none',
-                background: 'none',
+                borderRadius: '20px',
+                background: isActive ? '#4A8FA8' : 'transparent',
                 cursor: 'pointer',
-                borderBottom: isActive ? '3px solid #4A8FA8' : '3px solid transparent',
-                color: isActive ? '#4A8FA8' : '#666',
+                color: isActive ? 'white' : '#888',
                 transition: 'all 0.15s',
-                minWidth: '60px',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
             >
-              <span style={{ fontSize: '11px', fontWeight: 700 }}>Day {day.day}</span>
-              <span style={{ fontSize: '12px', fontWeight: isActive ? 700 : 400, marginTop: '1px' }}>
-                {day.date}
+              {isActive && (
+                <span style={{ fontSize: '10px', fontWeight: 700, opacity: 0.85 }}>Day {day.day}</span>
+              )}
+              <span style={{ fontSize: '12px', fontWeight: isActive ? 700 : 500 }}>
+                {day.date}({day.weekday})
               </span>
-              <span style={{ fontSize: '10px', opacity: 0.7 }}>({day.weekday})</span>
             </button>
           )
         })}
