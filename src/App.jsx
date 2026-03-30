@@ -3,11 +3,13 @@ import { schedule } from './data/scheduleData'
 import DayPage from './components/DayPage'
 import MapView from './components/MapView'
 import PhotosTab from './components/PhotosTab'
+import DiaryTab from './components/DiaryTab'
 import WelcomeScreen from './components/WelcomeScreen'
 
 const NAV_SCHEDULE = 'schedule'
 const NAV_MAP = 'map'
 const NAV_PHOTOS = 'photos'
+const NAV_DIARY = 'diary'
 
 function AppHeader({ member, onLogout }) {
   const [showLogo, setShowLogo] = useState(false)
@@ -124,6 +126,7 @@ function BottomNav({ active, onSelect }) {
     { id: NAV_SCHEDULE, label: '일정', icon: '📅' },
     { id: NAV_MAP, label: '지도', icon: '🗺️' },
     { id: NAV_PHOTOS, label: '사진', icon: '📸' },
+    { id: NAV_DIARY, label: '일기', icon: '📝' },
   ]
   return (
     <div style={{
@@ -200,9 +203,13 @@ export default function App() {
           <div style={{ height: '100%' }}>
             <MapView onNavigate={(day) => { setActiveDay(day); setNav(NAV_SCHEDULE) }} />
           </div>
-        ) : (
+        ) : nav === NAV_PHOTOS ? (
           <div style={{ height: '100%', overflow: 'hidden' }}>
             <PhotosTab member={member} />
+          </div>
+        ) : (
+          <div style={{ height: '100%', overflow: 'hidden' }}>
+            <DiaryTab member={member} />
           </div>
         )}
       </div>
