@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { schedule } from './data/scheduleData'
 import DayPage from './components/DayPage'
 import MapView from './components/MapView'
+import PhotosTab from './components/PhotosTab'
 
 const NAV_SCHEDULE = 'schedule'
 const NAV_MAP = 'map'
+const NAV_PHOTOS = 'photos'
 
 function AppHeader() {
   return (
@@ -80,6 +82,7 @@ function BottomNav({ active, onSelect }) {
   const items = [
     { id: NAV_SCHEDULE, label: '일정', icon: '📅' },
     { id: NAV_MAP, label: '지도', icon: '🗺️' },
+    { id: NAV_PHOTOS, label: '사진', icon: '📸' },
   ]
   return (
     <div style={{
@@ -137,9 +140,13 @@ export default function App() {
       <div style={{ flex: 1, overflow: nav === NAV_SCHEDULE ? 'auto' : 'hidden' }}>
         {nav === NAV_SCHEDULE ? (
           <DayPage day={currentDay} />
-        ) : (
+        ) : nav === NAV_MAP ? (
           <div style={{ height: '100%' }}>
             <MapView onNavigate={(day) => { setActiveDay(day); setNav(NAV_SCHEDULE) }} />
+          </div>
+        ) : (
+          <div style={{ height: '100%', overflow: 'hidden' }}>
+            <PhotosTab />
           </div>
         )}
       </div>
