@@ -15,10 +15,10 @@ const mainIcon = L.divIcon({
   className: '',
   html: `<div style="
     width:28px;height:28px;
-    background:#D80027;
+    background:#4A8FA8;
     border:3px solid white;
     border-radius:50%;
-    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+    box-shadow:0 2px 8px rgba(0,0,0,0.25);
     display:flex;align-items:center;justify-content:center;
   ">
     <div style="width:8px;height:8px;background:white;border-radius:50%;"></div>
@@ -58,7 +58,7 @@ export default function MapView() {
           {/* Route polyline */}
           <Polyline
             positions={routePositions}
-            color="#D80027"
+            color="#4A8FA8"
             weight={3}
             opacity={0.7}
             dashArray="8, 6"
@@ -110,7 +110,7 @@ export default function MapView() {
           <div style={{ fontWeight: 700, marginBottom: '8px', fontSize: '12px' }}>주요 경유지</div>
           {waypoints.filter(w => w.main).map((w, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#D80027', flexShrink: 0 }} />
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#4A8FA8', flexShrink: 0 }} />
               <span style={{ color: '#333' }}>{w.name}</span>
             </div>
           ))}
@@ -120,7 +120,7 @@ export default function MapView() {
               <span style={{ color: '#555' }}>경유 포인트</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: 20, height: 2, background: '#D80027', flexShrink: 0 }} />
+              <div style={{ width: 20, height: 2, background: '#4A8FA8', flexShrink: 0 }} />
               <span style={{ color: '#555' }}>이동 경로</span>
             </div>
           </div>

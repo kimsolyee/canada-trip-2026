@@ -9,7 +9,7 @@ const NAV_MAP = 'map'
 function AppHeader() {
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #D80027 0%, #8B0000 100%)',
+      background: 'linear-gradient(135deg, #6AAFCD 0%, #4A8FA8 100%)',
       padding: '16px 20px 12px',
       color: 'white',
     }}>
@@ -55,8 +55,8 @@ function DayTabs({ activeDay, onSelect }) {
                 border: 'none',
                 background: 'none',
                 cursor: 'pointer',
-                borderBottom: isActive ? '3px solid #D80027' : '3px solid transparent',
-                color: isActive ? '#D80027' : '#666',
+                borderBottom: isActive ? '3px solid #4A8FA8' : '3px solid transparent',
+                color: isActive ? '#4A8FA8' : '#666',
                 transition: 'all 0.15s',
                 minWidth: '60px',
               }}
@@ -100,7 +100,7 @@ function BottomNav({ active, onSelect }) {
             flexDirection: 'column',
             alignItems: 'center',
             gap: '2px',
-            color: active === item.id ? '#D80027' : '#888',
+            color: active === item.id ? '#4A8FA8' : '#888',
             fontWeight: active === item.id ? 700 : 400,
             fontSize: '12px',
           }}

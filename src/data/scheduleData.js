@@ -1,14 +1,14 @@
 export const TAG = {
-  travel:        { label: '이동', color: '#FF8C00', bg: '#FFF3E0', icon: '🚗' },
-  meal:          { label: '식사', color: '#2E7D32', bg: '#E8F5E9', icon: '🍽️' },
-  sightseeing:   { label: '관광', color: '#6A1B9A', bg: '#F3E5F5', icon: '📸' },
-  accommodation: { label: '숙박', color: '#1565C0', bg: '#E3F2FD', icon: '🏨' },
-  hotspring:     { label: '온천', color: '#C62828', bg: '#FFEBEE', icon: '♨️' },
+  travel:        { label: '이동', color: '#E8925A', bg: '#FFF3EB', icon: '🚗' },
+  meal:          { label: '식사', color: '#6BAE7E', bg: '#EDF7F0', icon: '🍽️' },
+  sightseeing:   { label: '관광', color: '#9B7EC8', bg: '#F3EEFB', icon: '📸' },
+  accommodation: { label: '숙박', color: '#6CA0C8', bg: '#EBF3FA', icon: '🏨' },
+  hotspring:     { label: '온천', color: '#D47A7A', bg: '#FBF0F0', icon: '♨️' },
 }
 
 export const ACCOM_TYPE = {
-  hotel: { badge: '🏨', color: '#2E7D32', bgColor: '#E8F5E9' },
-  home:  { badge: '🏠', color: '#E65100', bgColor: '#FFF3E0' },
+  hotel: { badge: '🏨', color: '#6BAE7E', bgColor: '#EDF7F0' },
+  home:  { badge: '🏠', color: '#E8925A', bgColor: '#FFF3EB' },
 }
 
 export const schedule = [

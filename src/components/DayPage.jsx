@@ -50,12 +50,12 @@ export default function DayPage({ day }) {
     <div style={{ padding: '16px', maxWidth: '720px', margin: '0 auto' }}>
       {/* Day Header Card */}
       <div style={{
-        background: 'linear-gradient(135deg, #D80027 0%, #8B0000 100%)',
+        background: 'linear-gradient(135deg, #6AAFCD 0%, #4A8FA8 100%)',
         borderRadius: '16px',
         padding: '20px',
         color: 'white',
         marginBottom: '20px',
-        boxShadow: '0 4px 20px #D8002740',
+        boxShadow: '0 4px 20px #6AAFCD40',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -98,7 +98,7 @@ export default function DayPage({ day }) {
           background: '#f8f9fa',
           borderRadius: '12px',
           padding: '14px 16px',
-          borderLeft: '4px solid #1565C0',
+          borderLeft: '4px solid #6CA0C8',
         }}>
           <div style={{ fontSize: '12px', color: '#888', marginBottom: '3px' }}>오늘의 숙박지</div>
           <div style={{ fontWeight: 600, fontSize: '14px' }}>{day.accommodation.name}</div>
