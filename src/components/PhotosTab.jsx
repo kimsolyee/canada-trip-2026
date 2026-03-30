@@ -186,9 +186,8 @@ function PhotoGrid({ photos }) {
   )
 }
 
-export default function PhotosTab() {
+export default function PhotosTab({ member }) {
   const [activeDay, setActiveDay] = useState(1)
-  const [member, setMember] = useState(MEMBERS[0])
   const [photos, setPhotos] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -217,23 +216,16 @@ export default function PhotosTab() {
       <div style={{ padding: '14px 16px 10px', background: 'white', borderBottom: '1px solid #eee', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
           <h2 style={{ fontSize: '17px', fontWeight: 700 }}>📸 가족 사진첩</h2>
-          {/* 업로더 선택 */}
-          <select
-            value={member}
-            onChange={e => setMember(e.target.value)}
-            style={{
-              padding: '5px 10px',
-              borderRadius: '16px',
-              border: '1.5px solid #4A8FA8',
-              fontSize: '13px',
-              color: '#4A8FA8',
-              fontWeight: 600,
-              background: 'white',
-              cursor: 'pointer',
-            }}
-          >
-            {MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
-          </select>
+          <span style={{
+            padding: '5px 12px',
+            borderRadius: '16px',
+            background: '#EBF3FA',
+            color: '#4A8FA8',
+            fontSize: '13px',
+            fontWeight: 700,
+          }}>
+            {member}
+          </span>
         </div>
 
         {/* 저장 용량 바 */}

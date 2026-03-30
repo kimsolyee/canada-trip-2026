@@ -3,12 +3,13 @@ import { schedule } from './data/scheduleData'
 import DayPage from './components/DayPage'
 import MapView from './components/MapView'
 import PhotosTab from './components/PhotosTab'
+import WelcomeScreen from './components/WelcomeScreen'
 
 const NAV_SCHEDULE = 'schedule'
 const NAV_MAP = 'map'
 const NAV_PHOTOS = 'photos'
 
-function AppHeader() {
+function AppHeader({ member, onLogout }) {
   const [showLogo, setShowLogo] = useState(false)
   return (
     <>
@@ -24,7 +25,7 @@ function AppHeader() {
             onClick={() => setShowLogo(true)}
             style={{ height: '52px', borderRadius: '8px', flexShrink: 0, cursor: 'pointer' }}
           />
-          <div>
+          <div style={{ flex: 1 }}>
             <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.5px' }}>
               CANADA FAMILY TRIP
             </div>
@@ -32,6 +33,22 @@ function AppHeader() {
               7월 13일 ~ 22일 · 10박 11일 · 7인 가족 · BC주 → 앨버타
             </div>
           </div>
+          <button
+            onClick={onLogout}
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              border: 'none',
+              borderRadius: '16px',
+              color: 'white',
+              fontSize: '12px',
+              fontWeight: 700,
+              padding: '5px 10px',
+              cursor: 'pointer',
+              flexShrink: 0,
+            }}
+          >
+            {member} ↩
+          </button>
         </div>
       </div>
 
@@ -145,8 +162,23 @@ function BottomNav({ active, onSelect }) {
 export default function App() {
   const [nav, setNav] = useState(NAV_SCHEDULE)
   const [activeDay, setActiveDay] = useState(1)
+  const [member, setMember] = useState(() => localStorage.getItem('canada_member') || null)
 
   const currentDay = schedule.find(d => d.day === activeDay)
+
+  const handleSelect = (name) => {
+    localStorage.setItem('canada_member', name)
+    setMember(name)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('canada_member')
+    setMember(null)
+  }
+
+  if (!member) {
+    return <WelcomeScreen onSelect={handleSelect} />
+  }
 
   return (
     <div style={{
@@ -155,7 +187,7 @@ export default function App() {
       height: '100dvh',
       overflow: 'hidden',
     }}>
-      <AppHeader />
+      <AppHeader member={member} onLogout={handleLogout} />
 
       {nav === NAV_SCHEDULE && (
         <DayTabs activeDay={activeDay} onSelect={setActiveDay} />
@@ -170,7 +202,7 @@ export default function App() {
           </div>
         ) : (
           <div style={{ height: '100%', overflow: 'hidden' }}>
-            <PhotosTab />
+            <PhotosTab member={member} />
           </div>
         )}
       </div>
