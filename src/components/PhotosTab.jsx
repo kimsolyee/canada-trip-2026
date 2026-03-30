@@ -4,7 +4,7 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebas
 import { db, storage } from '../firebase'
 import { schedule } from '../data/scheduleData'
 
-const MEMBERS = ['명란', '오곤', '봄', '솔', '향', '현우']
+const MEMBERS = ['명란', '오곤', '봄', '솔', '향', '현우', '윤구']
 const LIMIT_BYTES = 4.99 * 1024 * 1024 * 1024 // 4.99 GB
 
 function formatSize(bytes) {
