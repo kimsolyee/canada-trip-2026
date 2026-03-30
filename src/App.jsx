@@ -9,24 +9,45 @@ const NAV_MAP = 'map'
 const NAV_PHOTOS = 'photos'
 
 function AppHeader() {
+  const [showLogo, setShowLogo] = useState(false)
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, #3d2b1f 0%, #5c3d2e 100%)',
-      padding: '10px 20px',
-      color: 'white',
-    }}>
-      <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img src="/logo.png" alt="logo" style={{ height: '52px', borderRadius: '8px', flexShrink: 0 }} />
-        <div>
-          <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.5px' }}>
-            CANADA FAMILY TRIP
-          </div>
-          <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px' }}>
-            7월 13일 ~ 22일 · 10박 11일 · 7인 가족 · BC주 → 앨버타
+    <>
+      <div style={{
+        background: 'linear-gradient(135deg, #3d2b1f 0%, #5c3d2e 100%)',
+        padding: '10px 20px',
+        color: 'white',
+      }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <img
+            src="/logo.png"
+            alt="logo"
+            onClick={() => setShowLogo(true)}
+            style={{ height: '52px', borderRadius: '8px', flexShrink: 0, cursor: 'pointer' }}
+          />
+          <div>
+            <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+              CANADA FAMILY TRIP
+            </div>
+            <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px' }}>
+              7월 13일 ~ 22일 · 10박 11일 · 7인 가족 · BC주 → 앨버타
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {showLogo && (
+        <div
+          onClick={() => setShowLogo(false)}
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1000, padding: '20px',
+          }}
+        >
+          <img src="/logo.png" alt="logo" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '12px' }} />
+        </div>
+      )}
+    </>
   )
 }
 
