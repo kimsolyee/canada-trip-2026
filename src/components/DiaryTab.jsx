@@ -3,13 +3,9 @@ import { collection, doc, setDoc, onSnapshot, query, orderBy } from 'firebase/fi
 import { db } from '../firebase'
 import { schedule } from '../data/scheduleData'
 
-function DiaryEditor({ day, member, existing, onSave }) {
+function DiaryEditor({ day, member, existing }) {
   const [text, setText] = useState(existing?.content || '')
   const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    setText(existing?.content || '')
-  }, [existing, day])
 
   const handleSave = async () => {
     if (!text.trim()) return
@@ -184,7 +180,17 @@ export default function DiaryTab({ member }) {
         {loading ? (
           <div style={{ color: '#aaa', textAlign: 'center', padding: '20px' }}>불러오는 중...</div>
         ) : (
-          <DiaryEditor day={activeDay} member={member} existing={myEntry} />
+          <DiaryEditor key={`${activeDay}-${member}`} day={activeDay} member={member} existing={myEntry} />
+        )}
+
+        {/* 내 저장된 일기 */}
+        {myEntry && (
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#555', marginBottom: '8px' }}>
+              📖 저장된 내 일기
+            </div>
+            <DiaryCard entry={myEntry} />
+          </div>
         )}
 
         {/* 다른 멤버 일기 */}
@@ -197,9 +203,9 @@ export default function DiaryTab({ member }) {
           </>
         )}
 
-        {othersEntries.length === 0 && !loading && (
+        {!myEntry && othersEntries.length === 0 && !loading && (
           <div style={{ textAlign: 'center', color: '#ccc', fontSize: '13px', paddingTop: '10px' }}>
-            아직 다른 가족이 일기를 쓰지 않았어요
+            아직 아무도 일기를 쓰지 않았어요
           </div>
         )}
       </div>
