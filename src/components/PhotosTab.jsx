@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 import { db, storage } from '../firebase'
 import { schedule } from '../data/scheduleData'
 
@@ -27,6 +27,7 @@ function UploadButton({ dayNum, member, onUploaded }) {
         const url = await getDownloadURL(task.snapshot.ref)
         await addDoc(collection(db, 'photos'), {
           url,
+          storagePath: storageRef.fullPath,
           day: dayNum,
           member,
           createdAt: serverTimestamp(),
@@ -66,8 +67,28 @@ function UploadButton({ dayNum, member, onUploaded }) {
   )
 }
 
+async function deletePhoto(photo) {
+  await deleteDoc(doc(db, 'photos', photo.id))
+  try {
+    const storageRef = ref(storage, photo.storagePath)
+    await deleteObject(storageRef)
+  } catch {
+    // storagePath 없는 구버전 사진은 무시
+  }
+}
+
 function PhotoGrid({ photos }) {
   const [selected, setSelected] = useState(null)
+  const [deleting, setDeleting] = useState(null)
+
+  const handleDelete = async (e, photo) => {
+    e.stopPropagation()
+    if (!window.confirm(`"${photo.fileName}" 사진을 삭제할까요?`)) return
+    setDeleting(photo.id)
+    await deletePhoto(photo)
+    if (selected?.id === photo.id) setSelected(null)
+    setDeleting(null)
+  }
 
   if (photos.length === 0) {
     return (
@@ -88,20 +109,33 @@ function PhotoGrid({ photos }) {
           <div
             key={p.id}
             onClick={() => setSelected(p)}
-            style={{ aspectRatio: '1', overflow: 'hidden', cursor: 'pointer', background: '#f0f0f0' }}
+            style={{ aspectRatio: '1', overflow: 'hidden', cursor: 'pointer', background: '#f0f0f0', position: 'relative' }}
           >
             <img
               src={p.url}
               alt={p.fileName}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: deleting === p.id ? 0.4 : 1 }}
             />
+            <button
+              onClick={(e) => handleDelete(e, p)}
+              disabled={deleting === p.id}
+              style={{
+                position: 'absolute', top: 4, right: 4,
+                width: 24, height: 24,
+                background: 'rgba(0,0,0,0.55)',
+                border: 'none', borderRadius: '50%',
+                color: 'white', fontSize: 13, lineHeight: 1,
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              ✕
+            </button>
           </div>
         ))}
       </div>
 
       {selected && (
         <div
-          onClick={() => setSelected(null)}
           style={{
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
             display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -111,12 +145,26 @@ function PhotoGrid({ photos }) {
           <img
             src={selected.url}
             alt={selected.fileName}
-            style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px', objectFit: 'contain' }}
+            onClick={() => setSelected(null)}
+            style={{ maxWidth: '100%', maxHeight: '75vh', borderRadius: '8px', objectFit: 'contain', cursor: 'pointer' }}
           />
           <div style={{ color: 'white', marginTop: '12px', fontSize: '13px', opacity: 0.8 }}>
             {selected.member} · {selected.fileName}
           </div>
-          <div style={{ color: '#aaa', fontSize: '12px', marginTop: '4px' }}>탭하여 닫기</div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+            <button
+              onClick={() => setSelected(null)}
+              style={{ padding: '8px 20px', background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '20px', color: 'white', fontSize: '13px', cursor: 'pointer' }}
+            >
+              닫기
+            </button>
+            <button
+              onClick={(e) => handleDelete(e, selected)}
+              style={{ padding: '8px 20px', background: '#e53935', border: 'none', borderRadius: '20px', color: 'white', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              🗑️ 삭제
+            </button>
+          </div>
         </div>
       )}
     </>
