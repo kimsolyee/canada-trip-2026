@@ -137,7 +137,7 @@ export default function App() {
           <DayPage day={currentDay} />
         ) : (
           <div style={{ height: '100%' }}>
-            <MapView />
+            <MapView onNavigate={(day) => { setActiveDay(day); setNav(NAV_SCHEDULE) }} />
           </div>
         )}
       </div>
