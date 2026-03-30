@@ -5,15 +5,30 @@ import { db, storage } from '../firebase'
 import { schedule } from '../data/scheduleData'
 
 const MEMBERS = ['엄마', '아빠', '솔이', '도윤', '할머니', '할아버지', '이모']
+const LIMIT_BYTES = 4.99 * 1024 * 1024 * 1024 // 4.99 GB
 
-function UploadButton({ dayNum, member, onUploaded }) {
+function formatSize(bytes) {
+  if (bytes >= 1024 ** 3) return (bytes / 1024 ** 3).toFixed(2) + ' GB'
+  if (bytes >= 1024 ** 2) return (bytes / 1024 ** 2).toFixed(1) + ' MB'
+  return (bytes / 1024).toFixed(0) + ' KB'
+}
+
+function UploadButton({ dayNum, member, totalUsed }) {
   const inputRef = useRef()
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
+  const blocked = totalUsed >= LIMIT_BYTES
 
   const handleFile = async (e) => {
     const file = e.target.files[0]
     if (!file) return
+
+    if (totalUsed + file.size > LIMIT_BYTES) {
+      alert(`저장 공간이 부족해요!\n현재 사용: ${formatSize(totalUsed)}\n이 파일: ${formatSize(file.size)}\n한도: 4.99 GB`)
+      e.target.value = ''
+      return
+    }
+
     setUploading(true)
     setProgress(0)
 
@@ -30,13 +45,13 @@ function UploadButton({ dayNum, member, onUploaded }) {
           storagePath: storageRef.fullPath,
           day: dayNum,
           member,
+          fileSize: file.size,
           createdAt: serverTimestamp(),
           fileName: file.name,
         })
         setUploading(false)
         setProgress(0)
         e.target.value = ''
-        onUploaded?.()
       }
     )
   }
@@ -45,23 +60,23 @@ function UploadButton({ dayNum, member, onUploaded }) {
     <div>
       <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
       <button
-        onClick={() => inputRef.current.click()}
-        disabled={uploading}
+        onClick={() => !blocked && !uploading && inputRef.current.click()}
+        disabled={uploading || blocked}
         style={{
           padding: '8px 14px',
-          background: uploading ? '#e0e0e0' : '#4A8FA8',
+          background: blocked ? '#e57373' : uploading ? '#e0e0e0' : '#4A8FA8',
           color: 'white',
           border: 'none',
           borderRadius: '20px',
           fontSize: '13px',
           fontWeight: 600,
-          cursor: uploading ? 'default' : 'pointer',
+          cursor: (uploading || blocked) ? 'default' : 'pointer',
           display: 'flex',
           alignItems: 'center',
           gap: '5px',
         }}
       >
-        {uploading ? `업로드 중 ${progress}%` : '📷 사진 추가'}
+        {blocked ? '🚫 용량 초과' : uploading ? `업로드 중 ${progress}%` : '📷 사진 추가'}
       </button>
     </div>
   )
@@ -192,6 +207,9 @@ export default function PhotosTab() {
 
   const dayPhotos = photos.filter(p => p.day === activeDay)
   const currentDayInfo = schedule.find(d => d.day === activeDay)
+  const totalUsed = photos.reduce((sum, p) => sum + (p.fileSize || 0), 0)
+  const usedPct = Math.min((totalUsed / LIMIT_BYTES) * 100, 100)
+  const isNearLimit = usedPct >= 90
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -216,6 +234,23 @@ export default function PhotosTab() {
           >
             {MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
           </select>
+        </div>
+
+        {/* 저장 용량 바 */}
+        <div style={{ marginBottom: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: isNearLimit ? '#e53935' : '#888', marginBottom: '4px' }}>
+            <span>{isNearLimit ? '⚠️ 용량 부족' : '저장 용량'}</span>
+            <span>{formatSize(totalUsed)} / 4.99 GB</span>
+          </div>
+          <div style={{ height: 6, background: '#eee', borderRadius: 3, overflow: 'hidden' }}>
+            <div style={{
+              height: '100%',
+              width: `${usedPct}%`,
+              background: usedPct >= 100 ? '#e53935' : isNearLimit ? '#FF8C00' : '#4A8FA8',
+              borderRadius: 3,
+              transition: 'width 0.3s',
+            }} />
+          </div>
         </div>
 
         {/* Day 탭 */}
@@ -272,7 +307,7 @@ export default function PhotosTab() {
           </div>
           <div style={{ fontSize: '11px', color: '#888', marginTop: '1px' }}>{currentDayInfo?.title}</div>
         </div>
-        <UploadButton dayNum={activeDay} member={member} />
+        <UploadButton dayNum={activeDay} member={member} totalUsed={totalUsed} />
       </div>
 
       {/* 사진 그리드 */}
