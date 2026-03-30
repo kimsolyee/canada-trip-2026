@@ -11,16 +11,19 @@ const NAV_PHOTOS = 'photos'
 function AppHeader() {
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #6AAFCD 0%, #4A8FA8 100%)',
-      padding: '16px 20px 12px',
+      background: 'linear-gradient(135deg, #3d2b1f 0%, #5c3d2e 100%)',
+      padding: '10px 20px',
       color: 'white',
     }}>
-      <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <div style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>
-          🍁 캐나다 가족여행 2026
-        </div>
-        <div style={{ fontSize: '13px', opacity: 0.85, marginTop: '2px' }}>
-          7월 13일 ~ 22일 · 10박 11일 · 7인 가족 · BC주 → 앨버타 로드트립
+      <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <img src="/logo.png" alt="logo" style={{ height: '52px', borderRadius: '8px', flexShrink: 0 }} />
+        <div>
+          <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            CANADA FAMILY TRIP
+          </div>
+          <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px' }}>
+            7월 13일 ~ 22일 · 10박 11일 · 7인 가족 · BC주 → 앨버타
+          </div>
         </div>
       </div>
     </div>
